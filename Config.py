@@ -30,7 +30,7 @@ def unpackSettings(target: str) -> str:
 
 #TODO: stop being lazy and do this better
 jarPath = f'{unpackSettings("path")}'
-cliStart = f"java -jar \"osbot 2.6.67.jar\" -login {unpackSettings('credentials')} -bot "
+cliStart = f"java -jar \"osbot 2.6.69.jar\" -login {unpackSettings('credentials')} -bot "
 cliParams = ":0000 -allow lowcpu,norender,norandoms -proxy "
 
 class SubFrame(tk.Frame):
@@ -202,11 +202,13 @@ class IdleFrame(SubFrame):
                 self.activeList.insert(tk.END, account)
 
     def startAccount(self, account, script):
+        defaultPath = os.getcwd()
         os.chdir(jarPath)
         password = self.csv.getDF(account, 'pass')
         proxy = self.csv.getDF(account, 'proxy')
         world = self.getWorld(account)
         os.system(cliStart+account+':'+password+cliParams+proxy+" -world "+str(world)+" -script 845:"+str(script))
+        os.chdir(defaultPath)
 
     def runNext(self) -> None:
         idle = self.getItems()
