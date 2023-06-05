@@ -7,8 +7,6 @@ Configure settings.txt
 Must add proxies before accounts  
 Click start  
   
-More presets & one click account building are on the way  
-  
 TODO:  
 Initalize accounts on start instead of on import  
 More presets  
