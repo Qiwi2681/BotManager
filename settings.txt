@@ -1,0 +1,2 @@
+OSBot jar path: C:/Users/<user>/
+OSBot credentials: username:password

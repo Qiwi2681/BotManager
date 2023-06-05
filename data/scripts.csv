@@ -1,0 +1,25 @@
+questData,f2pQuests,rewards
+hop worlds between quests:false,quest:Dorics Quest,quest:X Marks The Spot@reward1:Mining
+hop worlds between quests frequency min:1,quest:Cooks Assistant,quest:Underground Pass@reward1:Willow shortbow%reward2:Mithril arrow
+hop worlds between quests frequency max:3,quest:Imp Catcher,quest:Shadow Of The Storm@reward1:Ranged
+hop worlds during quests:false,quest:Pirates Treasure,quest:Monkey Madness I@reward1:Do not use cannon%reward2:Do not claim reward
+hop worlds during quests frequency min:10,quest:Rune Mysteries,quest:Client Of Kourend@reward1:Hosidius%reward2:Slayer%reward3:Slayer
+hop worlds during quests frequency max:30,quest:Sheep Shearer,
+break between quests:true,quest:Ernest The Chicken,
+break between quests frequency min:@1-2,quest:The Restless Ghost,
+break between quests frequency max:@3-4,quest:Witchs Potion,
+break between quests duration min:@18-29,quest:X Marks The Spot,
+break between quests duration max:@30-55,,
+break during quests:false,,
+break during quests frequency min:10,,
+break during quests frequency max:30,,
+break during quests duration min:10,,
+break during quests duration max:30,,
+FOOD:$,,
+DEBUG MODE:false,,
+LOW FPS:false,,
+IRON MAN:false,,
+NO FOOD:false,,
+STAMINA POTIONS:true,,
+STYLE:0,,
+SPELL:0,,
