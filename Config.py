@@ -202,12 +202,11 @@ class IdleFrame(SubFrame):
                 self.activeList.insert(tk.END, account)
 
     def startAccount(self, account, script):
-        #os.chdir(jarPath)
+        os.chdir(jarPath)
         password = self.csv.getDF(account, 'pass')
         proxy = self.csv.getDF(account, 'proxy')
         world = self.getWorld(account)
-        #os.system(cliStart+account+':'+password+cliParams+proxy+world+" -script 845:"+script)
-        print(cliStart+account+':'+password+cliParams+proxy+" -world "+str(world)+" -script 845:"+str(script))
+        os.system(cliStart+account+':'+password+cliParams+proxy+" -world "+str(world)+" -script 845:"+str(script))
 
     def runNext(self) -> None:
         idle = self.getItems()
