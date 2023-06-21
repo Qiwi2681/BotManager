@@ -1,4 +1,4 @@
-questData,f2pQuests,rewards
+questDataF2p,f2pQuests,rewards
 hop worlds between quests:false,quest:Dorics Quest,quest:X Marks The Spot@reward1:Mining
 hop worlds between quests frequency min:1,quest:Cooks Assistant,quest:Underground Pass@reward1:Willow shortbow%reward2:Mithril arrow
 hop worlds between quests frequency max:3,quest:Imp Catcher,quest:Shadow Of The Storm@reward1:Ranged

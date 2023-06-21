@@ -1,12 +1,14 @@
 import FileInterfaces
 import random
 
+import ConfigWindow
+
 class Script():
     def __init__(self):
         self.csv = FileInterfaces.csv('data/scripts.csv')
         self.txt = FileInterfaces.txt()
         #TODO: add settings.txt for paths
-        self.OSBpath = 'C:/Users/ashto/OSBot/Data/'
+        self.OSBpath = ConfigWindow.jarPath
 
     @staticmethod
     def dataParser(line: str, delimiter: list[str], food: str) -> str:
@@ -16,15 +18,19 @@ class Script():
                     value = ''.join(line[i+1:])
                     line = line[:i]
                     break
+        # if we have a range of numbers, get a random one
         try:
             lower, upper = value.split('-')
             value = random.randrange(int(lower), int(upper)+1)
             return line+str(value)
+        # if we have a food value, get food
         except ValueError:
             return line+food
+        # normal line
         except UnboundLocalError:
             return line
 
+#this might do better as a function instead of a class
 class Questing(Script):
     def __init__(self, food):
         super().__init__()
@@ -33,8 +39,8 @@ class Questing(Script):
         self.food = food
         #if mode == 'f2p':
         self.data = self.getData()
-        self.quests = self.csv.getColumn('f2pQuests')
-        self.rewards = self.parseRewards(self.csv.getColumn('rewards'))
+        self.quests = self.csv['f2pQuests']
+        self.rewards = self.parseRewards(self.csv['rewards'])
         self.script = self.createProfile()
 
     @staticmethod
@@ -50,7 +56,7 @@ class Questing(Script):
 
     def getData(self):
         parsedData = []
-        lines = self.csv.getColumn('questData')
+        lines = self.csv['questDataF2p']
         for line in lines:
             parsedData.append(self.dataParser(line, ['@', '$'], self.food))
         return '\n'.join(parsedData)

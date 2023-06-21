@@ -1,80 +1,94 @@
 import pandas as pd
-import random
-import string
 from typing import Any
 
-# TODO: optimize loadDF to only have the current accounts in memory, not the whole df
-#TODO: normalize the csv, and txt initializations to match the new name format
-class csv():
-    def __init__(self, csv='data/accounts.csv') -> None:
-        self.df = self.loadDF(name=csv)
+class CSV:
+    def __init__(self, csv: str):
+        self.name = 'data/' + csv
+        self.df = self.loadDF()
 
-    #TODO: normalize the loadDF calls, remove the default value
-    def loadDF(self, name='data/accounts.csv') -> pd.DataFrame:
-        data = pd.read_csv(name)
-        # we should remove the columns we dont need
-        if name == 'data/accounts.csv':
-            return data.copy().set_index('email')# index the file in memory
-        return data
+    def __repr__(self) -> dict:
+        return self.name
 
-    def saveDF(self, name='data/accounts.csv') -> None:
-        self.df.to_csv(name)
+    def __iter__(self) -> map:
+        return iter(self.df.index)
 
-    def updateDF(self, username: str, variable: str, value) -> None:
-        if value is None:
-            raise ValueError
-        self.df.at[username, variable] = value
-        self.saveDF()
+    def __len__(self) -> int:
+        return self.df.shape[0]
 
-    def removeIdx(self, i) -> None:
-        self.df = self.df.drop(self.df.index[i])
-        self.saveDF()
-
-    def getDF(self, username: str, variable: str) -> Any:
-        return self.df.loc[username, variable]
-    
-    def getColumn(self, column: string) -> list[Any]:
-        return self.df[column].tolist()
-
-    def isNone(self, element: str) -> bool:
-        return pd.isna(element)
-
-    def initAccount(self, df, username: str, password: str, proxy: str, bonded: bool, food: str) -> None:
-        #this line is using the child class instead of self???
-        if username in df.index:
-            return None
-        df.at[username, 'pass'] = password
-        df.at[username, 'proxy'] = proxy
-        df.at[username, 'running'] = False
-        df.at[username, 'bonded'] = bonded
-        df.at[username, 'food'] = food
-        self.df = df
-        self.saveDF()
-
-
-class txt():
-    @staticmethod
-    def randomName() -> str:
-        return ''.join(random.choice(string.ascii_lowercase) for i in range(8))
-
-    def saveFile(self, data: list[str], path: str, txt=False, fileName=None):
-        if fileName is None:
-            fileName = self.randomName()
-        name = path+fileName
-        if txt:
-            name += '.txt'
-        with open(name, 'w') as file:
-            for line in data:
-                file.write(line+'\n')
-        return fileName
-
-    def loadFile(self, path: str, fileName: str) -> list[str]:
+    def __getitem__(self, *indices: str) -> Any:
         try:
-            with open(path+fileName, 'r') as file:
-                lst = []
-                for line in file.readlines():
-                    lst.append(line.rstrip('\n'))
-                return lst
-        except FileNotFoundError:
-            print(f'file not found: {path+fileName}')
-            return []
+            return self.df.loc[indices[0]][indices[1]]
+        except IndexError:
+            return self.df.loc[indices]
+        except KeyError:
+            print(indices)
+            if isinstance(indices[0], int):
+                return self.df.iloc[indices[0]]
+            self.addAccount(indices[0])
+
+    def __setitem__(self, key: str, value: Any):
+        end = len(self)
+        self.df.at[end, key] = value
+        self.df.to_csv(self.name, index=False)
+
+    def loadDF(self) -> pd.DataFrame:
+        if self.name == 'data/accounts.csv':
+            return pd.read_csv(self.name, index_col='email')
+        return pd.read_csv(self.name)
+
+    def saveDF(self):
+        self.df.to_csv(self.name)
+
+    def removeIdx(self, idx: Any):
+        self.df = self.df.drop(idx)
+        if not isinstance(idx, int):
+            self.saveDF()
+            return
+        self.df = self.df.reset_index(drop=True)
+        self.df.to_csv(self.name, index=False)
+
+    def getRow(self, index: str) -> list[Any]:
+        rowData = []
+        for column in self.df.columns:
+            rowData.append(self[index, column])
+        return rowData
+
+    def addAccount(self, login: str):
+        email, password = login.split(':')
+        self.df.at[email, 'pass'] = password
+        self.df.at[email, 'running'] = False
+        self.saveDF()
+        self.df = self.loadDF()
+
+
+
+    # REDUNDANT, requires implementation
+    def initAccount(self, email: str, password: str, proxy: str, bonded: bool, food: str):
+        if email in self.df.index:
+            return None
+        self.df.at[email, 'proxy'] = proxy
+        
+        self.df.at[email, 'bonded'] = bonded
+        self.df.at[email, 'food'] = food
+        self.saveDF()
+
+
+
+if __name__ == '__main__':
+    newAccounts = ['gfg@gma.com:gad', 'gf1g312@gma.com:gad', 'gf554@gma.com:gad']
+    csv = CSV('proxies.csv')
+
+    #a = csv['proxies']
+    for proxy in csv:
+        print(csv[proxy][0])
+
+    #for account in csv:
+        #print(csv[account]['bonded'])
+
+    #addAccouint
+    #addAccouint = csv['a:111']
+    
+    #getData
+    #a = csv['a']['pass']
+    #print(a)
+
